@@ -339,10 +339,10 @@ function renderShort(){
   const n = st.short.length, ranked = st.rank.filter(Boolean).length;
   const sep = r => '';
   $('#ladder').innerHTML = st.rank.map((id, i) => { if (!id) return ''; const r = i + 1, s = byId[id];
-    return sep(r) + `<li class="slot full" data-r="${r}" data-id="${id}" id="slot${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk" data-t="${POINTS(r)}">${r}<i>+${POINTS(r)}</i></span>${songMeta(s)}
+    return sep(r) + `<li class="slot full" data-r="${r}" data-id="${id}" id="slot${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk" data-t="${POINTS(r)}">${r}</span>${songMeta(s)}
       <button class="x" data-unrank="${i}" aria-label="הוצא">✕</button></li>`; }).join('');
   $('#empties').innerHTML = st.rank.map((id, i) => { if (id) return ''; const r = i + 1;
-    return sep(r) + `<li class="slot" data-r="${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk" data-t="${POINTS(r)}">${r}<i>+${POINTS(r)}</i></span><span class="ph">${i===ranked?'הבא נכנס לכאן':''}</span></li>`; }).join('');
+    return sep(r) + `<li class="slot" data-r="${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk" data-t="${POINTS(r)}">${r}</span><span class="ph">${i===ranked?'הבא נכנס לכאן':''}</span></li>`; }).join('');
   const pool = st.short.filter(id => !st.rank.includes(id));
   $('#poolCount').textContent = pool.length;
   $('#pool').innerHTML = !n ? `<div class="empty" style="padding:16px 4px;font-size:13px"><div class="big">⭐</div>ריק. עברו ל"כל השירים" וסמנו כמה שבא לכם.</div>`
