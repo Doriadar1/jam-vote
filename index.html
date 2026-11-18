@@ -194,6 +194,17 @@ input.name:focus{outline:none;border-color:var(--accent)}
 .sendNote{text-align:center;color:var(--muted);font-size:13px;margin-bottom:24px}
 body{padding-bottom:40px}
 .toast{bottom:40px}
+.slot .rk{position:relative;overflow:visible}
+.rk[data-t="4"],.legend b[data-t="4"]{background:var(--gold)!important;color:#3a2600!important}
+.rk[data-t="3"],.legend b[data-t="3"]{background:var(--silver)!important;color:#222!important}
+.rk[data-t="2"],.legend b[data-t="2"]{background:var(--bronze)!important;color:#2b1300!important}
+.rk[data-t="1"],.legend b[data-t="1"]{background:#7a6a92!important;color:#fff!important}
+.slot:not(.full) .rk{opacity:.55}
+.rk i{direction:ltr;unicode-bidi:isolate;position:absolute;bottom:-5px;left:-7px;font-style:normal;font-size:9px;font-weight:900;background:var(--bg);color:var(--accent2);border-radius:8px;padding:1px 4px;line-height:1.3;box-shadow:0 0 0 1px var(--line)}
+.legend{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:0 2px 8px}
+.legend span{display:flex;align-items:center;gap:3px}
+.legend b{width:10px;height:10px;border-radius:50%;display:inline-block}
+.flyer{width:54px!important;height:54px!important;display:grid;place-items:center;font-size:28px;background:radial-gradient(circle,var(--accent2),var(--accent))!important;box-shadow:0 0 24px 6px rgba(255,107,61,.7)!important}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 </head>
@@ -234,6 +245,7 @@ body{padding-bottom:40px}
       <div class="col colTop">
         <h3>🏆 הטופ 10 שלי <small id="ladderCount">0/10</small></h3>
         <div class="colHint">גררו למעלה ולמטה לשינוי סדר</div>
+        <div class="legend"><span><b data-t="4"></b>4 נק׳</span><span><b data-t="3"></b>3</span><span><b data-t="2"></b>2</span><span><b data-t="1"></b>1</span></div>
         <ol class="ladder" id="ladder"></ol>
         <ol class="ladder" id="empties"></ol>
       </div>
@@ -325,13 +337,12 @@ function renderList(){
 
 function renderShort(){
   const n = st.short.length, ranked = st.rank.filter(Boolean).length;
-  const TIER = {1: '👑 4 נקודות', 2: '3 נקודות לכל אחד', 5: '2 נקודות לכל אחד', 8: 'נקודה אחת לכל אחד'};
-  const sep = r => TIER[r] ? `<li class="tierSep">${TIER[r]}</li>` : '';
+  const sep = r => '';
   $('#ladder').innerHTML = st.rank.map((id, i) => { if (!id) return ''; const r = i + 1, s = byId[id];
-    return sep(r) + `<li class="slot full" data-r="${r}" data-id="${id}" id="slot${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk">${r}</span>${songMeta(s)}
+    return sep(r) + `<li class="slot full" data-r="${r}" data-id="${id}" id="slot${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk" data-t="${POINTS(r)}">${r}<i>+${POINTS(r)}</i></span>${songMeta(s)}
       <button class="x" data-unrank="${i}" aria-label="הוצא">✕</button></li>`; }).join('');
   $('#empties').innerHTML = st.rank.map((id, i) => { if (id) return ''; const r = i + 1;
-    return sep(r) + `<li class="slot" data-r="${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk">${r}</span><span class="ph">${i===ranked?'הבא נכנס לכאן':''}</span></li>`; }).join('');
+    return sep(r) + `<li class="slot" data-r="${r}"><div class="bar" style="width:${POINTS(r)*25}%"></div><span class="rk" data-t="${POINTS(r)}">${r}<i>+${POINTS(r)}</i></span><span class="ph">${i===ranked?'הבא נכנס לכאן':''}</span></li>`; }).join('');
   const pool = st.short.filter(id => !st.rank.includes(id));
   $('#poolCount').textContent = pool.length;
   $('#pool').innerHTML = !n ? `<div class="empty" style="padding:16px 4px;font-size:13px"><div class="big">⭐</div>ריק. עברו ל"כל השירים" וסמנו כמה שבא לכם.</div>`
@@ -354,13 +365,13 @@ function renderMeta(){ $('#shortBadge').textContent = st.short.length; }
 function render(){ renderList(); renderShort(); renderMeta(); save(); }
 
 function bump(){ const b = $('#shortBadge'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
-function fly(fromEl, toEl){
+function fly(fromEl, toEl, done){
   const a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
-  const f = document.createElement('div'); f.className = 'flyer';
-  f.style.left = a.left + a.width/2 - 8 + 'px'; f.style.top = a.top + a.height/2 - 8 + 'px';
+  const f = document.createElement('div'); f.className = 'flyer'; f.textContent = '🎵';
+  f.style.left = a.left + a.width/2 - 27 + 'px'; f.style.top = a.top + a.height/2 - 27 + 'px';
   document.body.appendChild(f);
-  f.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top-a.height/2}px) scale(.4)`}],
-    {duration:550, easing:'cubic-bezier(.5,-0.3,.7,1)'}).onfinish = () => { f.remove(); bump(); };
+  f.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top-a.height/2}px) scale(.55)`}],
+    {duration:650, easing:'cubic-bezier(.5,-0.3,.7,1)'}).onfinish = () => { f.remove(); (done || bump)(); };
 }
 function toast(msg){ const t = document.createElement('div'); t.className='toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
 
@@ -373,8 +384,9 @@ function toggle(id, el){
 function compact(){ const f = st.rank.filter(Boolean); st.rank = [...f, ...Array(10 - f.length).fill(null)]; }
 function rankIt(id){
   const i = st.rank.indexOf(null); if (i < 0) return toast('הדירוג מלא — הוציאו שיר עם ✕ כדי לפנות מקום');
+  const src = document.querySelector(`.pc[data-id="${id}"]`), target = $('#empties .slot');
+  if (src && target) fly(src, target, () => { const el = $('#slot' + (i+1)); el && el.classList.add('flash'); });
   st.rank[i] = id; render();
-  const el = $('#slot' + (i+1)); if (el) { el.classList.add('flash'); }
   if (i === 9) toast('🎉 הטופ 10 מלא! אפשר לשלוח');
 }
 function move(i, d){ const j = i + d; if (j < 0 || j > 9 || !st.rank[j]) return; [st.rank[i], st.rank[j]] = [st.rank[j], st.rank[i]]; render(); const el = $('#slot'+(j+1)); el && el.classList.add('flash'); }
