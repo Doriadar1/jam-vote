@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>הטופ 10 שלי לג'אם</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17121f; --bg2:#211a2c; --card:#2a2137; --card2:#332842; --line:#43365a;
+  --text:#fbf3e6; --muted:#b9a9cc; --accent:#ff6b3d; --accent2:#ffc542; --pink:#ff4f8b; --teal:#3ddbc0;
+  --gold:#ffc542; --silver:#d9dee8; --bronze:#e0905a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:Rubik,system-ui,sans-serif;min-height:100vh;
+  background-image:radial-gradient(circle at 15% -10%,#3a1f4a 0,transparent 45%),radial-gradient(circle at 110% 20%,#4a2420 0,transparent 40%);
+  background-attachment:fixed;padding-bottom:140px}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header{padding:22px 0 8px;text-align:center;position:relative}
+.kicker{font-size:12px;letter-spacing:3px;color:var(--accent2);text-transform:uppercase;font-weight:700}
+h1{font-family:'Secular One',Rubik,sans-serif;font-size:clamp(30px,8vw,46px);margin:4px 0 2px;line-height:1.05;
+  background:linear-gradient(90deg,var(--accent2),var(--accent),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:15px;margin:0}
+.help{position:absolute;left:0;top:22px;width:40px;height:40px;border-radius:50%;background:var(--card2);font-size:20px;font-weight:900;color:var(--accent2)}
+/* steps */
+.steps{display:flex;gap:6px;margin:16px 0 12px}
+.step{flex:1;background:var(--card);border-radius:14px;padding:10px 8px;text-align:center;border:2px solid transparent;transition:.3s}
+.step b{display:block;font-size:13px}
+.step small{color:var(--muted);font-size:11px}
+.step .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--line);font-weight:900;font-size:13px;margin-bottom:4px}
+.step.on{border-color:var(--accent);background:var(--card2)}
+.step.on .n{background:var(--accent);color:#1a0f08}
+.step.done .n{background:var(--teal);color:#062b25}
+/* tabs */
+.tabs{position:sticky;top:0;z-index:20;display:flex;gap:8px;padding:10px 0;background:linear-gradient(var(--bg) 75%,transparent)}
+.tab{flex:1;padding:13px 10px;border-radius:14px;background:var(--card);font-size:16px;font-weight:700;position:relative;transition:.2s}
+.tab.on{background:var(--accent);color:#1a0f08}
+.badge{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--pink);color:#fff;font-size:13px;margin-inline-start:6px;vertical-align:1px}
+.tab.on .badge{background:#1a0f08;color:var(--accent2)}
+.bump{animation:bump .45s}
+@keyframes bump{30%{transform:scale(1.35)}60%{transform:scale(.9)}}
+/* list */
+.search{width:100%;padding:13px 16px;border-radius:14px;border:2px solid var(--line);background:var(--bg2);color:var(--text);font:inherit;font-size:16px;margin-bottom:10px}
+.search:focus{outline:none;border-color:var(--accent)}
+.filters{display:flex;gap:6px;margin-bottom:10px}
+.chip{padding:7px 14px;border-radius:20px;background:var(--card);font-size:14px;color:var(--muted)}
+.chip.on{background:var(--card2);color:var(--text);box-shadow:inset 0 0 0 2px var(--accent2)}
+.hint{background:var(--card);border-radius:14px;padding:12px 14px;margin:0 0 12px;font-size:14px;color:var(--muted);border-inline-start:4px solid var(--accent2)}
+.hint b{color:var(--text)}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;padding:8px 8px 8px 8px;margin-bottom:8px;transition:background .25s,transform .25s}
+.row.sel{background:linear-gradient(90deg,#3d2a2a,var(--card2));box-shadow:inset 0 0 0 2px var(--accent)}
+.play{flex:none;width:44px;height:44px;border-radius:12px;background:#ff0033;color:#fff;font-size:16px;display:grid;place-items:center}
+.meta{flex:1;min-width:0}
+.meta .t{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta .a{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ltr{direction:ltr;unicode-bidi:plaintext;text-align:right}
+.pick{flex:none;height:44px;padding:0 14px;border-radius:12px;background:var(--card2);font-weight:700;font-size:14px;white-space:nowrap;transition:.2s}
+.pick.on{background:var(--accent);color:#1a0f08}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+.empty .big{font-size:44px}
+/* ladder */
+.ladderHead{display:flex;justify-content:space-between;align-items:end;margin:6px 0 8px}
+.ladderHead h2{margin:0;font-family:'Secular One',sans-serif;font-size:22px}
+.ladderHead span{color:var(--muted);font-size:13px}
+.ladder{list-style:none;padding:0;margin:0 0 18px}
+.slot{display:flex;align-items:center;gap:8px;border-radius:14px;padding:8px;margin-bottom:6px;background:var(--bg2);border:2px dashed var(--line);min-height:62px;position:relative;overflow:hidden;transition:.25s}
+.slot.full{border-style:solid;border-color:transparent;background:var(--card)}
+.slot.flash{animation:flash .6s}
+@keyframes flash{0%{box-shadow:0 0 0 0 var(--accent2)}100%{box-shadow:0 0 0 14px transparent}}
+.bar{position:absolute;inset-inline-start:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(255,197,66,.16),rgba(255,107,61,.06));pointer-events:none}
+.rk{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px;background:var(--line);position:relative;z-index:1}
+.slot[data-r="1"] .rk{background:var(--gold);color:#3a2600;font-size:22px}
+.slot[data-r="2"] .rk{background:var(--silver);color:#222}
+.slot[data-r="3"] .rk{background:var(--bronze);color:#2b1300}
+.slot .meta{z-index:1}
+.slot .ph{color:var(--muted);font-size:14px;z-index:1;flex:1}
+.pts{flex:none;z-index:1;font-size:12px;font-weight:700;padding:4px 8px;border-radius:10px;background:rgba(0,0,0,.3);color:var(--accent2);white-space:nowrap}
+.mv{flex:none;z-index:1;display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:22px;border-radius:6px;background:var(--card2);font-size:11px}
+.mv button:disabled{opacity:.25}
+.x{flex:none;z-index:1;width:30px;height:30px;border-radius:50%;background:transparent;color:var(--muted);font-size:18px}
+.endLabel{font-size:12px;color:var(--muted);margin:2px 4px 6px;display:flex;align-items:center;gap:6px}
+.endLabel.top{color:var(--gold)}
+.pool h3{margin:16px 0 8px;font-size:16px}
+.toRank{background:var(--teal);color:#062b25}
+.rm{flex:none;width:36px;height:44px;border-radius:12px;background:transparent;color:var(--muted);font-size:18px}
+/* send bar */
+.sendbar{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(23,18,31,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.sendbar .in{max-width:720px;margin:0 auto}
+.prog{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-bottom:8px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0;transition:width .4s}
+.sendrow{display:flex;gap:8px;align-items:center}
+.sendrow .status{flex:1;font-size:14px;color:var(--muted)}
+.sendrow .status b{color:var(--text)}
+.go{padding:13px 18px;border-radius:14px;background:var(--accent);color:#1a0f08;font-weight:900;font-size:16px;white-space:nowrap}
+.go:disabled{background:var(--line);color:var(--muted)}
+/* modals */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,6,14,.82);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+.box{background:var(--bg2);border-radius:22px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:22px;border:1px solid var(--line);animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.box h2{font-family:'Secular One',sans-serif;margin:0 0 6px;font-size:26px}
+.box p{color:var(--muted);margin:0 0 14px}
+.big-btn{width:100%;padding:15px;border-radius:14px;background:var(--accent);color:#1a0f08;font-weight:900;font-size:17px;margin-top:8px}
+.ghost{width:100%;padding:12px;border-radius:14px;background:transparent;color:var(--muted);font-size:15px;margin-top:4px}
+input.name{width:100%;padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-size:18px;margin-bottom:10px}
+input.name:focus{outline:none;border-color:var(--accent)}
+.sum{list-style:none;padding:0;margin:0 0 12px}
+.sum li{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sum li b{width:26px;text-align:center;color:var(--accent2)}
+.sum li span.p{white-space:nowrap;margin-inline-start:auto;color:var(--muted);font-size:12px}
+.yt{aspect-ratio:16/9;width:100%;border:0;border-radius:14px;background:#000}
+/* tutorial */
+.tut{text-align:center}
+.tutStage{height:210px;position:relative;margin:6px 0 14px;background:var(--card);border-radius:18px;overflow:hidden}
+.dots{display:flex;justify-content:center;gap:6px;margin-bottom:6px}
+.dots i{width:8px;height:8px;border-radius:4px;background:var(--line);transition:.3s}
+.dots i.on{width:22px;background:var(--accent)}
+.mini{position:absolute;left:16px;right:16px;height:30px;border-radius:9px;background:var(--card2);display:flex;align-items:center;padding:0 10px;font-size:12px;gap:8px}
+.mini .h{margin-inline-start:auto;width:22px;height:22px;border-radius:6px;background:var(--line);display:grid;place-items:center;font-size:12px}
+/* scene 1: pick songs */
+.s1 .mini:nth-child(1){top:18px}.s1 .mini:nth-child(2){top:56px}.s1 .mini:nth-child(3){top:94px}.s1 .mini:nth-child(4){top:132px}.s1 .mini:nth-child(5){top:170px}
+.s1 .mini:nth-child(odd) .h{animation:heart 3s infinite}
+.s1 .mini:nth-child(3) .h{animation-delay:.6s}.s1 .mini:nth-child(5) .h{animation-delay:1.2s}
+.s1 .mini:nth-child(odd){animation:glow 3s infinite}
+.s1 .mini:nth-child(3){animation-delay:.6s}.s1 .mini:nth-child(5){animation-delay:1.2s}
+@keyframes heart{0%,20%{background:var(--line);transform:scale(1)}28%{transform:scale(1.5)}35%,90%{background:var(--accent);transform:scale(1)}100%{background:var(--line)}}
+@keyframes glow{0%,25%{box-shadow:none}35%,90%{box-shadow:inset 0 0 0 2px var(--accent)}100%{box-shadow:none}}
+/* scene 2: into the ladder */
+.s2 .slotm{position:absolute;right:16px;width:34px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:900;font-size:13px;background:var(--line)}
+.s2 .slotm:nth-of-type(1){top:20px;background:var(--gold);color:#3a2600}.s2 .slotm:nth-of-type(2){top:62px;background:var(--silver);color:#222}.s2 .slotm:nth-of-type(3){top:104px;background:var(--bronze);color:#2b1300}
+.s2 .fly{position:absolute;right:58px;left:16px;height:30px;border-radius:9px;background:var(--card2);box-shadow:inset 0 0 0 2px var(--teal);display:flex;align-items:center;padding:0 10px;font-size:12px;opacity:0}
+.s2 .fly.a{animation:flyA 3.6s infinite}.s2 .fly.b{animation:flyB 3.6s infinite}.s2 .fly.c{animation:flyC 3.6s infinite}
+@keyframes flyA{0%{top:170px;opacity:0}8%{opacity:1;top:170px}25%,92%{top:20px;opacity:1}100%{opacity:0;top:20px}}
+@keyframes flyB{0%,25%{top:170px;opacity:0}33%{opacity:1;top:170px}50%,92%{top:62px;opacity:1}100%{opacity:0;top:62px}}
+@keyframes flyC{0%,50%{top:170px;opacity:0}58%{opacity:1;top:170px}75%,92%{top:104px;opacity:1}100%{opacity:0;top:104px}}
+.s2 .more{position:absolute;bottom:12px;right:16px;color:var(--muted);font-size:12px}
+/* scene 3: points */
+.s3{padding:14px 16px}
+.pt{display:flex;align-items:center;gap:8px;height:15px;margin-bottom:3px;font-size:11px}
+.pt b{width:20px;text-align:center}
+.pt i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,var(--accent2),var(--accent));transform-origin:right;animation:grow 3s infinite}
+.pt span{color:var(--muted);white-space:nowrap}
+@keyframes grow{0%{transform:scaleX(0)}30%,90%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+/* scene 4: send */
+.s4{display:grid;place-items:center}
+.s4 .card{background:var(--card2);border-radius:14px;padding:14px 18px;width:70%;animation:send 3s infinite}
+.s4 .card div{height:8px;border-radius:4px;background:var(--line);margin:6px 0}
+.s4 .card .nm{background:var(--accent2);width:50%}
+@keyframes send{0%,40%{transform:none;opacity:1}70%{transform:translateY(-160px) rotate(-8deg) scale(.6);opacity:0}71%{transform:translateY(40px);opacity:0}100%{transform:none;opacity:1}}
+.s4 .ok{position:absolute;bottom:14px;font-size:13px;color:var(--teal);font-weight:700;animation:okk 3s infinite}
+@keyframes okk{0%,60%{opacity:0}70%,95%{opacity:1}}
+/* flyer for add animation */
+.flyer{position:fixed;z-index:60;width:16px;height:16px;border-radius:50%;background:var(--accent);pointer-events:none;box-shadow:0 0 12px var(--accent)}
+.confetti{position:fixed;top:-10px;width:9px;height:14px;z-index:70;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.toast{white-space:nowrap;position:fixed;bottom:150px;left:50%;transform:translateX(-50%);background:var(--card2);padding:10px 16px;border-radius:12px;z-index:80;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.4);animation:fade .2s}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <button class="help" id="helpBtn" aria-label="איך זה עובד">?</button>
+    <div class="kicker">JAM NIGHT · TOP 25</div>
+    <h1>הטופ 10 שלי לג'אם</h1>
+    <p class="sub">עוזרים לבחור את 25 השירים של הג'אם הבא</p>
+  </header>
+
+  <div class="steps">
+    <div class="step" id="st1"><span class="n">1</span><b>רשימה קצרה</b><small>כמה שבא לך</small></div>
+    <div class="step" id="st2"><span class="n">2</span><b>דירוג 10</b><small>1 = הכי אוהב/ת</small></div>
+    <div class="step" id="st3"><span class="n">3</span><b>שם + שליחה</b><small>וזהו</small></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="all">🎵 כל השירים</button>
+    <button class="tab" data-tab="short">⭐ הרשימה שלי<span class="badge" id="shortBadge">0</span></button>
+  </div>
+
+  <section id="pAll">
+    <div class="hint">סמנו <b>כמה שירים שבא לכם</b> ← הם נכנסים לרשימה הקצרה. ▶ פותח את השיר ביוטיוב.</div>
+    <input class="search" id="q" type="search" placeholder="חיפוש שיר או אמן…">
+    <div class="filters">
+      <button class="chip on" data-f="all">הכל</button>
+      <button class="chip" data-f="en">לועזי</button>
+      <button class="chip" data-f="he">עברי</button>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <section id="pShort" hidden>
+    <div class="hint" id="shortHint"></div>
+    <div class="ladderHead"><h2>🏆 הדירוג שלי</h2><span id="ladderCount">0/10</span></div>
+    <div class="endLabel top">👑 מקום 1 = השיר שהכי בא לך לנגן · 10 נקודות</div>
+    <ol class="ladder" id="ladder"></ol>
+    <div class="endLabel">⬆ מקום 10 = הכי פחות מבין העשרה שלך · נקודה אחת</div>
+    <div class="pool">
+      <h3 id="poolTitle">ברשימה הקצרה, עוד לא בדירוג</h3>
+      <div id="pool"></div>
+    </div>
+  </section>
+</div>
+
+<div class="sendbar">
+  <div class="in">
+    <div class="prog"><i id="progBar"></i></div>
+    <div class="sendrow">
+      <div class="status" id="status"></div>
+      <button class="go" id="goBtn" disabled>שליחה ✉</button>
+    </div>
+  </div>
+</div>
+
+<!-- tutorial -->
+<div class="modal" id="tutM">
+  <div class="box tut">
+    <div class="dots" id="dots"></div>
+    <div class="tutStage" id="stage"></div>
+    <h2 id="tutT"></h2>
+    <p id="tutP"></p>
+    <button class="big-btn" id="tutNext">הבא ←</button>
+    <button class="ghost" id="tutSkip">דלג</button>
+  </div>
+</div>
+
+<!-- video -->
+<div class="modal" id="vidM">
+  <div class="box">
+    <h2 id="vidT" class="ltr" style="font-size:20px"></h2>
+    <p id="vidA" class="ltr"></p>
+    <iframe class="yt" id="vidF" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    <button class="big-btn" id="vidPick"></button>
+    <a id="vidOut" target="_blank" rel="noopener" class="ghost" style="display:block;text-align:center;text-decoration:none">פתח ביוטיוב ↗</a>
+    <button class="ghost" id="vidClose">סגור</button>
+  </div>
+</div>
+
+<!-- send -->
+<div class="modal" id="sendM">
+  <div class="box">
+    <h2>כמעט שם 🎸</h2>
+    <p>תבדקו שהסדר נכון: למעלה הכי אוהבים, למטה הכי פחות.</p>
+    <ul class="sum" id="sum"></ul>
+    <input class="name" id="name" placeholder="השם שלך" maxlength="40" autocomplete="name">
+    <button class="big-btn" id="sendNow">שליחה סופית ✉</button>
+    <button class="ghost" id="sendBack">רגע, אני רוצה לשנות</button>
+  </div>
+</div>
+
+<!-- done -->
+<div class="modal" id="doneM">
+  <div class="box" style="text-align:center">
+    <div style="font-size:60px">🎉</div>
+    <h2>נשלח! תודה</h2>
+    <p>הדירוג שלך נקלט. התוצאות יוכרזו בג'אם 😉</p>
+    <p style="font-size:13px">רוצה לשנות? אפשר לשלוח שוב עם אותו שם, רק השליחה האחרונה נספרת.</p>
+    <button class="big-btn" id="doneOk">סגור</button>
+  </div>
+</div>
+
+<script>
+const SONGS = [{"id": 1, "title": "Come Together", "artist": "The Beatles", "yt": "oolpPmuK2I8"}, {"id": 2, "title": "Here Comes The Sun", "artist": "The Beatles", "yt": "xUNqsfFUwhY"}, {"id": 3, "title": "Oh! Darling", "artist": "The Beatles", "yt": "9BznFjbcBVs"}, {"id": 4, "title": "Reflections of My Life", "artist": "Marmalade", "yt": "xw9o_4KLREA"}, {"id": 5, "title": "Ain't No Sunshine", "artist": "Bill Withers", "yt": "Nuanwn3v-2I"}, {"id": 6, "title": "Goodbye Yellow Brick Road", "artist": "Elton John", "yt": "wy709iNG6i8"}, {"id": 7, "title": "Mr. Blue Sky", "artist": "Electric Light Orchestra", "yt": "aQUlA8Hcv4s"}, {"id": 8, "title": "Starman", "artist": "David Bowie", "yt": "t365MuktYQs"}, {"id": 9, "title": "My Sweet Lord", "artist": "George Harrison", "yt": "XWTvkcHlOPQ"}, {"id": 10, "title": "Hopelessly Devoted To You", "artist": "Olivia Newton-John", "yt": "r-3NvDp28U4"}, {"id": 11, "title": "Tiny Dancer", "artist": "Elton John", "yt": "yYcyacLRPNs"}, {"id": 12, "title": "Another Brick in the Wall, Pt. 2", "artist": "Pink Floyd", "yt": "HrxX9TBj2zY"}, {"id": 13, "title": "Under Pressure", "artist": "Queen, David Bowie", "yt": "a01QQZyl-_I"}, {"id": 14, "title": "Head Over Heels", "artist": "Tears For Fears", "yt": "CsHiG-43Fzg"}, {"id": 15, "title": "Shake the Disease", "artist": "Depeche Mode", "yt": "r_0sL_SQYvw"}, {"id": 16, "title": "Don't You Want Me", "artist": "The Human League", "yt": "uPudE8nDog0"}, {"id": 17, "title": "Careless Whisper", "artist": "George Michael", "yt": "izGwDsrQ1eQ"}, {"id": 18, "title": "Mad World", "artist": "Tears For Fears", "yt": "u1ZvPSpLxCg"}, {"id": 19, "title": "Eye In The Sky", "artist": "The Alan Parsons Project", "yt": "56hqrlQxMMI"}, {"id": 20, "title": "Don't You (Forget About Me)", "artist": "Simple Minds", "yt": "CdqoNKCCt7A"}, {"id": 21, "title": "Stop", "artist": "Sam Brown", "yt": "eIdHbK6onkY"}, {"id": 22, "title": "Wicked Game", "artist": "Chris Isaak", "yt": "jd-qI62gNJM"}, {"id": 23, "title": "Old and Wise", "artist": "The Alan Parsons Project", "yt": "FDlDKvidYbk"}, {"id": 24, "title": "Livin' On A Prayer", "artist": "Bon Jovi", "yt": "lDK9QqIzhwk"}, {"id": 25, "title": "Islands In the Stream", "artist": "Dolly Parton, Kenny Rogers", "yt": "UaNGtgYwSsU"}, {"id": 26, "title": "Should I Stay or Should I Go", "artist": "The Clash", "yt": "xMaE6toi4mk"}, {"id": 27, "title": "Total Eclipse of the Heart", "artist": "Bonnie Tyler", "yt": "lcOxhH8N3Bo"}, {"id": 28, "title": "Bigmouth Strikes Again", "artist": "The Smiths", "yt": "PtzhvJh9NRY"}, {"id": 29, "title": "Got My Mind Set on You", "artist": "George Harrison", "yt": "_71w4UA2Oxo"}, {"id": 30, "title": "Let Love Rule", "artist": "Lenny Kravitz", "yt": "TcU57tAKzng"}, {"id": 31, "title": "Common People", "artist": "Pulp", "yt": "yuTMWgOduFM"}, {"id": 32, "title": "Ordinary World", "artist": "Duran Duran", "yt": "FqIACCH20JU"}, {"id": 33, "title": "In Bloom", "artist": "Nirvana", "yt": "PbgKEjNBHqM"}, {"id": 34, "title": "Tender", "artist": "Blur", "yt": "SaHrqKKFnSA"}, {"id": 35, "title": "Come As You Are", "artist": "Nirvana", "yt": "vabnZ9-ex7o"}, {"id": 36, "title": "Black Hole Sun", "artist": "Soundgarden", "yt": "3mbBbFH9fAg"}, {"id": 37, "title": "You Oughta Know", "artist": "Alanis Morissette", "yt": "NPcyTyilmYY"}, {"id": 38, "title": "Easy", "artist": "Faith No More", "yt": "vPzDTfIb0DU"}, {"id": 39, "title": "Bitter Sweet Symphony", "artist": "The Verve", "yt": "1lyu1KKwC74"}, {"id": 40, "title": "Glory Box", "artist": "Portishead", "yt": "yAKX51r7erw"}, {"id": 41, "title": "Kiss from a Rose", "artist": "Seal", "yt": "hDd2G_V1rzc"}, {"id": 42, "title": "It Must Have Been Love", "artist": "Roxette", "yt": "k2C5TjS2sh4"}, {"id": 43, "title": "Losing My Religion", "artist": "R.E.M.", "yt": "xwtdhWltSIg"}, {"id": 44, "title": "Disco 2000", "artist": "Pulp", "yt": "qJS3xnD7Mus"}, {"id": 45, "title": "I Will Survive", "artist": "CAKE", "yt": "f9rCUQjmkxU"}, {"id": 46, "title": "I Don't Want to Miss a Thing", "artist": "Aerosmith", "yt": "JkK8g6FMEXE"}, {"id": 47, "title": "That Thing You Do!", "artist": "The Wonders", "yt": "ajNTIklt8do"}, {"id": 48, "title": "Mary", "artist": "Supergrass", "yt": "eLWm5ceH3PQ"}, {"id": 49, "title": "What's Up?", "artist": "4 Non Blondes", "yt": "6NXnxTNIWkc"}, {"id": 50, "title": "Torn", "artist": "Natalie Imbruglia", "yt": "VV1XWJN3nJo"}, {"id": 51, "title": "Black", "artist": "Pearl Jam", "yt": "qgaRVvAKoqQ"}, {"id": 52, "title": "Friday I'm In Love", "artist": "The Cure", "yt": "mGgMZpGYiy8"}, {"id": 53, "title": "It Ain't Over 'Til It's Over", "artist": "Lenny Kravitz", "yt": "TmENMZFUU_0"}, {"id": 54, "title": "הכעס", "artist": "רוקפור", "yt": "Tw6ExvpuKT0"}, {"id": 55, "title": "השמיים הכחולים", "artist": "אסף אמדורסקי", "yt": "sUfTN50bxuQ"}, {"id": 56, "title": "כשזה עמוק", "artist": "קורין אלאל", "yt": "QDO4N8SgzD8"}, {"id": 57, "title": "מתנה לחג", "artist": "נושאי המגבעת", "yt": "fAjL0n1_zE0"}, {"id": 58, "title": "פרצופה של המדינה", "artist": "תיסלם", "yt": "n_N2_RfpMrE"}, {"id": 59, "title": "ענוג", "artist": "נוער שוליים", "yt": "R-7ALh2kACU"}, {"id": 60, "title": "הביאו את הסתיו", "artist": "איפה הילד", "yt": "Ml3UN1Vs6RM"}, {"id": 61, "title": "הכל מבינה", "artist": "פורטרט", "yt": "IPzOTFRKPkM"}, {"id": 62, "title": "אחד אלוהים", "artist": "איפה הילד", "yt": "7q8u35KHmHU"}, {"id": 63, "title": "כשנפוליאון יכבוש את עכו", "artist": "הבילויים", "yt": "uAX-FrSU3KE"}, {"id": 64, "title": "לגור איתו", "artist": "ריקי גל", "yt": "LsAqdXfI3A4"}, {"id": 65, "title": "הדפוק הזה", "artist": "ירמי קפלן", "yt": "LGVVp1ikF-c"}, {"id": 66, "title": "עשי לי את המוות", "artist": "החברים של נטשה", "yt": "HiL2vQExn_o"}, {"id": 67, "title": "אבשלום", "artist": "אריק איינשטיין ושלום חנוך", "yt": "GpZ8xuZ4TY0"}, {"id": 68, "title": "שברי את הטלוויזיה", "artist": "החברים של נטשה", "yt": "VZ7CA5yEUEI"}, {"id": 69, "title": "עוד יהיה לי", "artist": "מרגלית צנעני", "yt": "qBx7TT6ShXY"}, {"id": 70, "title": "מה שעובר עלי", "artist": "איפה הילד", "yt": "3yGAmQEtm00"}, {"id": 71, "title": "דרך המשי", "artist": "יהודית רביץ", "yt": "HhTHeiSwy2o"}, {"id": 72, "title": "Girlfriend in a Coma", "artist": "The Smiths", "yt": "3GhoWZ5qTwI"}, {"id": 73, "title": "Just the Two of Us", "artist": "Grover Washington Jr.", "yt": "v8oqbWrP1QY"}, {"id": 74, "title": "Moving", "artist": "Supergrass", "yt": "Q8w81AAK7to"}, {"id": 75, "title": "La Isla Bonita", "artist": "Madonna", "yt": "zpzdgmqIHOQ"}, {"id": 76, "title": "Sunny Afternoon", "artist": "The Kinks", "yt": "TYIl6n_SRCI"}, {"id": 77, "title": "Girl", "artist": "The Beatles", "yt": "mmiSKzlzuI0"}, {"id": 78, "title": "מישהו שומע אותי", "artist": "איפה הילד", "yt": "vmQhvVN4hPY"}, {"id": 79, "title": "Coffee and TV", "artist": "Blur", "yt": "6oqXVx3sBOk"}, {"id": 80, "title": "September", "artist": "Earth Wind and Fire", "yt": "Gs069dndIYk"}];
+const ENDPOINT = "";
+const K = 'jamvote.v1';
+const POINTS = r => 11 - r;
+const isHe = s => /[֐-׿]/.test(s.title);
+let st = {short: [], rank: Array(10).fill(null), name: '', seenTut: false};
+try { Object.assign(st, JSON.parse(localStorage.getItem(K) || '{}')); } catch(e) {}
+const ids = new Set(SONGS.map(s => s.id));
+st.short = st.short.filter(i => ids.has(i));
+st.rank = st.rank.map(i => (i && st.short.includes(i)) ? i : null);
+const save = () => { try { localStorage.setItem(K, JSON.stringify(st)); } catch(e) {} };
+const byId = Object.fromEntries(SONGS.map(s => [s.id, s]));
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tab = 'all', filt = 'all';
+
+function songMeta(s){ return `<div class="meta"><div class="t ltr">${esc(s.title)}</div><div class="a ltr">${esc(s.artist)}</div></div>`; }
+
+function renderList(){
+  const q = $('#q').value.trim().toLowerCase();
+  const rows = SONGS.filter(s => (filt==='all' || (filt==='he') === isHe(s)) &&
+    (!q || (s.title + ' ' + s.artist).toLowerCase().includes(q)));
+  $('#list').innerHTML = rows.length ? rows.map(s => {
+    const on = st.short.includes(s.id);
+    return `<div class="row${on?' sel':''}" data-id="${s.id}">
+      <button class="play" data-play="${s.id}" aria-label="נגן">▶</button>${songMeta(s)}
+      <button class="pick${on?' on':''}" data-toggle="${s.id}">${on?'✓ ברשימה':'+ לרשימה'}</button></div>`;
+  }).join('') : `<div class="empty"><div class="big">🔍</div>לא מצאנו כזה</div>`;
+}
+
+function renderShort(){
+  const n = st.short.length, ranked = st.rank.filter(Boolean).length;
+  $('#ladder').innerHTML = st.rank.map((id, i) => {
+    const r = i + 1, s = id && byId[id];
+    const bar = `<div class="bar" style="width:${POINTS(r)*10}%"></div>`;
+    if (!s) return `<li class="slot" data-r="${r}">${bar}<span class="rk">${r}</span><span class="ph">${i===st.rank.indexOf(null)?'← השיר הבא שתוסיפו ייכנס לכאן':'מקום ריק'}</span><span class="pts">${POINTS(r)} נק׳</span></li>`;
+    return `<li class="slot full" data-r="${r}" id="slot${r}">${bar}<span class="rk">${r}</span>${songMeta(s)}
+      <span class="pts">${POINTS(r)} נק׳</span>
+      <span class="mv"><button data-up="${i}" ${i===0?'disabled':''} aria-label="למעלה">▲</button><button data-down="${i}" ${i===9?'disabled':''} aria-label="למטה">▼</button></span>
+      <button class="x" data-unrank="${i}" aria-label="הוצא מהדירוג">✕</button></li>`;
+  }).join('');
+  const pool = st.short.filter(id => !st.rank.includes(id));
+  $('#poolTitle').hidden = !n;
+  $('#pool').innerHTML = !n ? `<div class="empty"><div class="big">⭐</div>הרשימה הקצרה ריקה.<br>עברו ל"כל השירים" וסמנו כמה שבא לכם.</div>`
+    : pool.length ? pool.map(id => { const s = byId[id]; return `<div class="row" data-id="${id}">
+      <button class="play" data-play="${id}" aria-label="נגן">▶</button>${songMeta(s)}
+      <button class="pick toRank" data-rank="${id}" ${ranked>=10?'disabled style="opacity:.35"':''}>🏆 לדירוג</button>
+      <button class="rm" data-toggle="${id}" aria-label="הסר מהרשימה">🗑</button></div>`; }).join('')
+    : `<div class="empty" style="padding:14px">כל השירים מהרשימה הקצרה כבר בדירוג 👌</div>`;
+  $('#shortHint').innerHTML = n < 10
+    ? `יש לך <b>${n}</b> שירים ברשימה הקצרה. צריך <b>לפחות 10</b> כדי למלא את הדירוג. עוד ${10-n} 👈 <a href="#" data-goto="all" style="color:var(--accent2)">לכל השירים</a>`
+    : ranked < 10 ? `לחצו <b>🏆 לדירוג</b> על השיר שהכי בא לכם — הוא נכנס למקום 1. אחר כך הבא בתור למקום 2, וכן הלאה. ▲▼ משנים סדר.`
+    : `הדירוג מלא! בדקו את הסדר ולחצו <b>שליחה</b> למטה.`;
+  $('#ladderCount').textContent = `${ranked}/10`;
+}
+
+function renderMeta(){
+  const n = st.short.length, ranked = st.rank.filter(Boolean).length;
+  $('#shortBadge').textContent = n;
+  $('#progBar').style.width = (n >= 10 ? 40 : n*4) + ranked*6 + '%';
+  $('#status').innerHTML = n < 10 ? `שלב 1: <b>${n}</b> ברשימה הקצרה (לפחות 10)`
+    : ranked < 10 ? `שלב 2: <b>${ranked}/10</b> מדורגים` : `<b>מוכן לשליחה!</b>`;
+  $('#goBtn').disabled = ranked < 10;
+  $('#st1').className = 'step ' + (n >= 10 ? 'done' : 'on');
+  $('#st2').className = 'step ' + (ranked >= 10 ? 'done' : n >= 10 ? 'on' : '');
+  $('#st3').className = 'step ' + (ranked >= 10 ? 'on' : '');
+}
+function render(){ renderList(); renderShort(); renderMeta(); save(); }
+
+function bump(){ const b = $('#shortBadge'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+function fly(fromEl, toEl){
+  const a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'flyer';
+  f.style.left = a.left + a.width/2 - 8 + 'px'; f.style.top = a.top + a.height/2 - 8 + 'px';
+  document.body.appendChild(f);
+  f.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top-a.height/2}px) scale(.4)`}],
+    {duration:550, easing:'cubic-bezier(.5,-0.3,.7,1)'}).onfinish = () => { f.remove(); bump(); };
+}
+function toast(msg){ const t = document.createElement('div'); t.className='toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+
+function toggle(id, el){
+  const i = st.short.indexOf(id);
+  if (i >= 0) { st.short.splice(i, 1); const r = st.rank.indexOf(id); if (r >= 0) st.rank[r] = null; }
+  else { st.short.push(id); if (el) fly(el, $('#shortBadge')); }
+  render();
+}
+function compact(){ const f = st.rank.filter(Boolean); st.rank = [...f, ...Array(10 - f.length).fill(null)]; }
+function rankIt(id){
+  const i = st.rank.indexOf(null); if (i < 0) return toast('הדירוג מלא — הוציאו שיר עם ✕ כדי לפנות מקום');
+  st.rank[i] = id; render();
+  const el = $('#slot' + (i+1)); if (el) { el.classList.add('flash'); }
+  if (i === 9) toast('🎉 הדירוג מלא! אפשר לשלוח');
+}
+function move(i, d){ const j = i + d; if (j < 0 || j > 9 || !st.rank[j]) return; [st.rank[i], st.rank[j]] = [st.rank[j], st.rank[i]]; render(); const el = $('#slot'+(j+1)); el && el.classList.add('flash'); }
+
+function setTab(t){
+  tab = t;
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  $('#pAll').hidden = t !== 'all'; $('#pShort').hidden = t !== 'short';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+let vidId = null;
+function openVid(id){
+  const s = byId[id]; vidId = id;
+  $('#vidT').textContent = s.title; $('#vidA').textContent = s.artist;
+  $('#vidF').src = `https://www.youtube-nocookie.com/embed/${s.yt}?autoplay=1&rel=0`;
+  $('#vidOut').href = `https://www.youtube.com/watch?v=${s.yt}`;
+  syncVidPick(); $('#vidM').classList.add('on');
+}
+function syncVidPick(){ const on = st.short.includes(vidId); $('#vidPick').textContent = on ? '✓ ברשימה הקצרה (לחצו להסרה)' : '+ הוסף לרשימה הקצרה'; $('#vidPick').style.background = on ? 'var(--teal)' : ''; }
+function closeVid(){ $('#vidF').src = 'about:blank'; $('#vidM').classList.remove('on'); }
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('button,a'); if (!t) return;
+  const d = t.dataset;
+  if (d.tab) setTab(d.tab);
+  else if (d.goto) { e.preventDefault(); setTab(d.goto); }
+  else if (d.toggle) toggle(+d.toggle, t);
+  else if (d.play) openVid(+d.play);
+  else if (d.rank) rankIt(+d.rank);
+  else if (d.up) move(+d.up, -1);
+  else if (d.down) move(+d.down, 1);
+  else if (d.unrank) { st.rank[+d.unrank] = null; compact(); render(); }
+  else if (d.f) { filt = d.f; document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === t)); renderList(); }
+});
+$('#q').addEventListener('input', renderList);
+$('#vidClose').onclick = closeVid;
+$('#vidM').addEventListener('click', e => { if (e.target.id === 'vidM') closeVid(); });
+$('#vidPick').onclick = () => { toggle(vidId, $('#vidPick')); syncVidPick(); };
+
+/* send */
+$('#goBtn').onclick = () => {
+  $('#sum').innerHTML = st.rank.map((id, i) => `<li><b>${i+1}</b><span class="ltr">${esc(byId[id].title)} · <span style="color:var(--muted)">${esc(byId[id].artist)}</span></span><span class="p">${POINTS(i+1)} נק׳</span></li>`).join('');
+  $('#name').value = st.name || ''; $('#sendM').classList.add('on');
+};
+$('#sendBack').onclick = () => { $('#sendM').classList.remove('on'); setTab('short'); };
+$('#sendNow').onclick = async () => {
+  const name = $('#name').value.trim();
+  if (!name) { $('#name').focus(); $('#name').style.borderColor = 'var(--pink)'; return toast('מה השם שלך?'); }
+  if (!ENDPOINT) return toast('השליחה עוד לא מחוברת — נסו שוב בקרוב');
+  st.name = name; save();
+  const btn = $('#sendNow'); btn.disabled = true; btn.textContent = 'שולח…';
+  const payload = {name, ts: new Date().toISOString(), shortlist: st.short.length,
+    ranking: st.rank.map((id, i) => ({rank: i+1, points: POINTS(i+1), id, title: byId[id].title, artist: byId[id].artist}))};
+  try {
+    await fetch(ENDPOINT, {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(payload)});
+    $('#sendM').classList.remove('on'); $('#doneM').classList.add('on'); confetti();
+  } catch (err) { toast('השליחה נכשלה — בדקו אינטרנט ונסו שוב'); }
+  btn.disabled = false; btn.textContent = 'שליחה סופית ✉';
+};
+$('#doneOk').onclick = () => $('#doneM').classList.remove('on');
+function confetti(){
+  const cols = ['#ffc542','#ff6b3d','#ff4f8b','#3ddbc0','#fbf3e6'];
+  for (let i = 0; i < 90; i++) { const c = document.createElement('div'); c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw'; c.style.background = cols[i % 5];
+    c.style.animationDuration = 1.8 + Math.random()*1.8 + 's'; c.style.animationDelay = Math.random()*.4 + 's';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 4200); }
+}
+
+/* tutorial */
+const mini = (t, h) => `<div class="mini"><span>${t}</span><span class="h">${h||'♥'}</span></div>`;
+const TUT = [
+  {t: 'שלב 1: רשימה קצרה', p: 'עוברים על כל השירים ומסמנים <b>כמה שבא לכם</b>. אין הגבלה, רק צריך לפחות 10.',
+   s: `<div class="s1">${mini('Mr. Blue Sky','+')}${mini('Wicked Game','+')}${mini('הכעס','+')}${mini('Torn','+')}${mini('Starman','+')}</div>`},
+  {t: 'שלב 2: דירוג של 10', p: 'מהרשימה הקצרה בוחרים 10 ומסדרים אותם. <b>מקום 1 = הכי בא לי</b>, מקום 10 = הכי פחות מבין העשרה.',
+   s: `<div class="s2"><span class="slotm">1</span><span class="slotm">2</span><span class="slotm">3</span><div class="fly a">Mr. Blue Sky</div><div class="fly b">הכעס</div><div class="fly c">Starman</div><span class="more">…עד מקום 10</span></div>`},
+  {t: 'הסדר שווה נקודות', p: 'מקום 1 מקבל <b>10 נקודות</b>, מקום 2 מקבל 9… ומקום 10 מקבל נקודה אחת. 25 השירים עם הכי הרבה נקודות מכל החברים נכנסים לג\'אם.',
+   s: `<div class="s3">${[...Array(10)].map((_, i) => `<div class="pt"><b>${i+1}</b><i style="width:${(10-i)*7}%;animation-delay:${i*.08}s"></i><span>${10-i} נק׳</span></div>`).join('')}</div>`},
+  {t: 'שלב 3: שם ושליחה', p: 'כותבים שם ושולחים. התוצאות סודיות עד הג\'אם 🤫',
+   s: `<div class="s4"><div class="card"><div class="nm"></div><div></div><div></div><div style="width:70%"></div></div><span class="ok">✓ נשלח</span></div>`}
+];
+let ti = 0;
+function showTut(i){
+  ti = i; const x = TUT[i];
+  $('#stage').innerHTML = x.s; $('#tutT').textContent = x.t; $('#tutP').innerHTML = x.p;
+  $('#dots').innerHTML = TUT.map((_, j) => `<i class="${j===i?'on':''}"></i>`).join('');
+  $('#tutNext').textContent = i === TUT.length - 1 ? 'יאללה, מתחילים 🎸' : 'הבא ←';
+  $('#tutM').classList.add('on');
+}
+function endTut(){ $('#tutM').classList.remove('on'); st.seenTut = true; save(); }
+$('#tutNext').onclick = () => ti < TUT.length - 1 ? showTut(ti + 1) : endTut();
+$('#tutSkip').onclick = endTut;
+$('#helpBtn').onclick = () => showTut(0);
+
+render();
+if (!st.seenTut) showTut(0);
+if (st.short.length >= 10) setTab('short');
+</script>
+</body>
+</html>
